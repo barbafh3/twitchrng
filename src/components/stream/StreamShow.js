@@ -76,4 +76,8 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps,{ fetchStreams, fetchUsers, twitchAuth })(StreamShow);
+export default connect(mapStateToProps,{ 
+    fetchStreams,
+    fetchUsers,
+    twitchAuth
+})(StreamShow);
