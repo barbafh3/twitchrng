@@ -1,15 +1,5 @@
 import axios from 'axios';
 
-export const getStreams = token => {
-    return axios.create({
-        responseType: 'json',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        baseURL: 'https://api.twitch.tv/helix/'
-    });
-}
-
 export const apiAuthorize = () => {
     return axios.create({
         headers: {
@@ -27,3 +17,14 @@ export const getAuthToken = code => {
                 `client_secret=${clientSecret}&grant_type=client_credentials`
     });
 }
+
+export const twitchRequest = token => {
+    return axios.create({
+        responseType: 'json',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        baseURL: 'https://api.twitch.tv/helix/'
+    });
+}
+

@@ -3,9 +3,10 @@ import React from 'react';
 import StreamShow from './stream/StreamShow';
 
 const App = () => {
+    
     return (
         <div>
-            App
+            <h1>TwitchRNG</h1><br />
             <StreamShow />
         </div>
     );
