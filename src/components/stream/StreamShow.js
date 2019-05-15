@@ -22,7 +22,7 @@ class StreamShow extends Component {
                 rng = Math.trunc(Math.random() * 20);
                 console.log(rng);
                 user = this.props.streams[rng].user_name;
-                let timeout = 15000;
+                let timeout = 60000;
                 // let timeout = 1.8e+6;
                 if (user != currentUser) {
                     const script = document.createElement('script');
@@ -42,7 +42,6 @@ class StreamShow extends Component {
                     currentUser = user;
                     await this.reloadTimeout(timeout);
                 }
-                await this.reloadTimeout(5000);
             }
         //}
     }
@@ -52,11 +51,28 @@ class StreamShow extends Component {
     }
 
     renderButton = () => {
+        let text;
+        let classes = 'ui button ';
+        let icon;
         if (this.props.playerState){
-            return 'Keep watching';
+            text = 'Keep watching';
+            classes += 'primary';
+            icon = 'play icon';
         } else {
-            return 'RNG me!';
+            text = 'RNG me!';
+            classes += 'red';
+            icon = 'random icon';
         }
+        return (
+            <p>
+                <button 
+                    className={classes}
+                    onClick={() => this.changePlayerState()}
+                >
+                    <i className={icon}></i> {text}
+                </button>
+            </p>
+        );
     }
 
     async componentWillMount(){
@@ -66,14 +82,16 @@ class StreamShow extends Component {
         await this.renderTwitch();
     }
     
-    async componentDidMount(){
-        if (this.props.streams) {
-        }
-    }
-
     async componentDidUpdate(prevProps) {
         if (this.props.playerState !== prevProps.playerState) {
             await this.renderTwitch();
+            try {
+                await this.props.fetchStreams(this.props.accessToken);
+            } catch (e) {
+                console.log(e);
+                await this.props.twitchAuth();
+                await this.props.fetchStreams(this.props.accessToken);
+            }
         }
     }
 
@@ -81,12 +99,8 @@ class StreamShow extends Component {
         if (this.props.streams) {
             return (
                 <div>
-                    <p>
-                        <button onClick={() => this.changePlayerState()}>
-                            {this.renderButton()}
-                        </button>
-                    </p>
-                    <div id='twitch_embed'>
+                    {this.renderButton()}
+                    <div className='ui container centered' id='twitch_embed'>
                     </div>
                 </div>
             )
