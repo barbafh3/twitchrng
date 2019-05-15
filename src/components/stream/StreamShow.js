@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 
-import { fetchStreams, fetchUsers } from '../../actions/streamActions';
+import { setPlayerState, fetchStreams, fetchUsers } from '../../actions/streamActions';
 import { twitchAuth } from '../../actions/sessionActions';
 
 class StreamShow extends Component {
@@ -16,31 +16,46 @@ class StreamShow extends Component {
         let rng = null;
         let user = '';
         let embed;
-        while (true) {
-            rng = Math.trunc(Math.random() * 20);
-            console.log(rng);
-            user = this.props.streams[rng].user_name;
-            let timeout = 15000;
-//            let timeout = 1.8e+6;
-            if (user != currentUser) {
-                const script = document.createElement('script');
-                script.setAttribute(
-                    'src',
-                    'https://embed.twitch.tv/embed/v1.js'
-                );
-                script.addEventListener('load', () => {
-                    embed = new window.Twitch.Embed("twitch_embed", { 
-                        width: '854', 
-                        height: '480',
-                        channel: user,
-                        layout: 'video'
+        //while (true) {
+            while (this.props.playerState) {
+                document.getElementById('twitch_embed').innerHTML = '';
+                rng = Math.trunc(Math.random() * 20);
+                console.log(rng);
+                user = this.props.streams[rng].user_name;
+                let timeout = 15000;
+                // let timeout = 1.8e+6;
+                if (user != currentUser) {
+                    const script = document.createElement('script');
+                    script.setAttribute(
+                        'src',
+                        'https://embed.twitch.tv/embed/v1.js'
+                    );
+                    script.addEventListener('load', () => {
+                        embed = new window.Twitch.Embed("twitch_embed", { 
+                            width: '854', 
+                            height: '480',
+                            channel: user,
+                            layout: 'video'
+                        });
                     });
-                });
-                document.body.appendChild(script);
-                currentUser = user;
+                    document.body.appendChild(script);
+                    currentUser = user;
+                    await this.reloadTimeout(timeout);
+                }
+                await this.reloadTimeout(5000);
             }
-            await this.reloadTimeout(timeout);
-            document.getElementById('twitch_embed').innerHTML = '';
+        //}
+    }
+
+    changePlayerState = () => {
+        this.props.setPlayerState(!this.props.playerState);
+    }
+
+    renderButton = () => {
+        if (this.props.playerState){
+            return 'Keep watching';
+        } else {
+            return 'RNG me!';
         }
     }
 
@@ -56,10 +71,23 @@ class StreamShow extends Component {
         }
     }
 
+    async componentDidUpdate(prevProps) {
+        if (this.props.playerState !== prevProps.playerState) {
+            await this.renderTwitch();
+        }
+    }
+
     render(){
         if (this.props.streams) {
             return (
-                <div id='twitch_embed'>
+                <div>
+                    <p>
+                        <button onClick={() => this.changePlayerState()}>
+                            {this.renderButton()}
+                        </button>
+                    </p>
+                    <div id='twitch_embed'>
+                    </div>
                 </div>
             )
         } else {
@@ -72,6 +100,7 @@ const mapStateToProps = state => {
     return {
         users: state.streams.users,
         streams: state.streams.streams,
+        playerState: state.streams.playerState,
         accessToken: state.session.twitchToken
     }
 }
@@ -79,5 +108,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps,{ 
     fetchStreams,
     fetchUsers,
-    twitchAuth
+    twitchAuth,
+    setPlayerState
 })(StreamShow);

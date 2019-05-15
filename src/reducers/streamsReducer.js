@@ -1,6 +1,6 @@
-import { FETCH_STREAMS, FETCH_USERS } from '../actions/actionTypes';
+import { SET_PLAYER_STATE, FETCH_STREAMS, FETCH_USERS } from '../actions/actionTypes';
 
-export default (state = {}, action) => {
+export default (state = { playerState: true }, action) => {
     switch (action.type) {
         case FETCH_STREAMS:
             return {
@@ -11,6 +11,11 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 users: action.payload
+            }
+        case SET_PLAYER_STATE:
+            return{
+                ...state,
+                playerState: action.payload
             }
         default:
             return state;

@@ -1,5 +1,5 @@
 import { twitchRequest } from '../api/TwitchApi';
-import { FETCH_STREAMS, FETCH_USERS } from './actionTypes';
+import { SET_PLAYER_STATE, FETCH_STREAMS, FETCH_USERS } from './actionTypes';
 
 export const fetchStreams = token => async dispatch => {
     const response = await twitchRequest(token).get('/streams');
@@ -15,4 +15,11 @@ export const fetchUsers = token => async dispatch => {
         type: FETCH_USERS,
         payload: response.data.data
     });
+}
+
+export const setPlayerState = playerState => async dispatch => {
+    dispatch({
+        type: SET_PLAYER_STATE,
+        payload: playerState
+    })
 }
