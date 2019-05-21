@@ -4,7 +4,12 @@ import {
     FETCH_STREAMS_BY_TAG,
     FETCH_USERS,
     FETCH_TAGS,
-    GET_TAG_BY_NAME
+    SAVE_TAGS_TO_JSON,
+    LOAD_TAGS,
+    GET_TAG_BY_NAME,
+    FETCH_GAMES,
+    SAVE_GAMES_TO_JSON,
+    LOAD_GAMES
 } from '../actions/actionTypes';
 
 export default (state = { playerState: true }, action) => {
@@ -29,7 +34,30 @@ export default (state = { playerState: true }, action) => {
                 ...state,
                 playerState: action.payload
             }
+        case FETCH_GAMES:
+            return {
+                ...state,
+                games: action.payload
+            }
+        case SAVE_GAMES_TO_JSON:
+            return {
+                ...state
+            }
+        case LOAD_GAMES:
+            return {
+                ...state,
+                games: action.payload
+            }
         case FETCH_TAGS:
+            return {
+                ...state,
+                tags: action.payload
+            }
+        case SAVE_TAGS_TO_JSON:
+            return {
+                ...state
+            }
+        case LOAD_TAGS:
             return {
                 ...state,
                 tags: action.payload

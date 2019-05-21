@@ -4,10 +4,21 @@ import { connect } from 'react-redux';
 import {
     setPlayerState,
     fetchStreamsByTag,
+    fetchStreams,
     fetchUsers,
     fetchAllTags,
-    getTagByName
+    fetchAll,
+    saveTagsToJson,
+    getTagByName,
+    loadJson,
+    saveGamesToJson
 } from '../../actions/streamActions';
+import {
+    FETCH_TAGS,
+    FETCH_GAMES,
+    LOAD_TAGS,
+    LOAD_GAMES
+} from '../../actions/actionTypes';
 import { twitchAuth } from '../../actions/sessionActions';
 import TagForm from './TagForm';
 
@@ -83,20 +94,27 @@ class StreamShow extends Component {
         this.props.getTagByName(this.props.tags, formValues);
     }
 
+    sleep = milliseconds => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
     async componentWillMount(){
+//        this.props.loadJson(LOAD_TAGS, 'tags');
+//        this.props.loadJson(LOAD_GAMES, 'games');
         await this.props.twitchAuth();
-        await this.props.fetchAllTags(this.props.accessToken);
-        await this.props.getTagByName(this.props.tags, 'Speedrun');
-        await this.props.fetchStreamsByTag(this.props.accessToken, this.props.tag[0].tagId);
-        console.log(this.props.streams);
-        this.renderTwitch();
+//        await this.props.fetchStreams(this.props.accessToken);
+//        await this.props.fetchAll('/tags/streams', FETCH_TAGS, this.props.accessToken);
+//        await this.props.saveTagsToJson(this.props.tags);
+        await this.props.fetchAll('/games/top', FETCH_GAMES, null, this.sleep);
+        await this.props.saveGamesToJson(this.props.games, this.sleep);
+//        this.renderTwitch();
     }
     
     async componentDidUpdate(prevProps) {
         if (this.props.playerState !== prevProps.playerState) {
             await this.renderTwitch();
             try {
-                await this.props.fetchStreamsByTag(this.props.accessToken, this.props.tag[0].tagId);
+                //await this.props.fetchStreamsByTag(this.props.accessToken, this.props.tag[0].tagId);
             } catch (e) {
                 console.log(e);
                 await this.props.twitchAuth();
@@ -126,6 +144,7 @@ const mapStateToProps = state => {
         users: state.streams.users,
         streams: state.streams.streams,
         tags: state.streams.tags,
+        games: state.streams.games,
         tag: state.streams.tag,
         playerState: state.streams.playerState,
         accessToken: state.session.twitchToken
@@ -134,9 +153,14 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps,{
     fetchStreamsByTag,
+    fetchStreams,
+    saveTagsToJson,
     fetchUsers,
     twitchAuth,
     setPlayerState,
     fetchAllTags,
-    getTagByName
+    fetchAll,
+    getTagByName,
+    loadJson,
+    saveGamesToJson
 })(StreamShow);

@@ -8,7 +8,7 @@ export const apiAuthorize = () => {
     });
 }
 
-export const getAuthToken = code => {
+export const getAuthToken = () => {
     const clientId = 'aslj9ag0ds13j1qot1ui4hzdqss0bx';
     const clientSecret = 'dwtgwxpd5y0u7tbmxzripfu5ps7y0o';
     return axios.create({
@@ -19,12 +19,23 @@ export const getAuthToken = code => {
 }
 
 export const twitchRequest = token => {
-    return axios.create({
-        responseType: 'json',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        baseURL: 'https://api.twitch.tv/helix/'
-    });
+    const clientId = 'aslj9ag0ds13j1qot1ui4hzdqss0bx';
+    if (token) {
+        return axios.create({
+            responseType: 'json',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            baseURL: 'https://api.twitch.tv/helix/'
+        });
+    } else {
+        return axios.create({
+            responseType: 'json',
+            headers: {
+                'Client-ID': clientId
+            },
+            baseURL: 'https://api.twitch.tv/helix/'
+        });
+    }
 }
 
