@@ -17,7 +17,9 @@ import {
     FETCH_TAGS,
     FETCH_GAMES,
     LOAD_TAGS,
-    LOAD_GAMES
+    LOAD_TAG,
+    LOAD_GAMES,
+    LOAD_GAME
 } from '../../actions/actionTypes';
 import { twitchAuth } from '../../actions/sessionActions';
 import TagForm from './TagForm';
@@ -101,12 +103,13 @@ class StreamShow extends Component {
     async componentWillMount(){
 //        this.props.loadJson(LOAD_TAGS, 'tags');
 //        this.props.loadJson(LOAD_GAMES, 'games');
+        this.props.loadJson(LOAD_GAME, 'game', 'overwatch');
         await this.props.twitchAuth();
 //        await this.props.fetchStreams(this.props.accessToken);
-//        await this.props.fetchAll('/tags/streams', FETCH_TAGS, this.props.accessToken);
+//        await this.props.fetchAll('/tags/streams', FETCH_TAGS, this.props.accessToken, this.sleep);
 //        await this.props.saveTagsToJson(this.props.tags);
-        await this.props.fetchAll('/games/top', FETCH_GAMES, null, this.sleep);
-        await this.props.saveGamesToJson(this.props.games, this.sleep);
+//        await this.props.fetchAll('/games/top', FETCH_GAMES, null, this.sleep);
+//        await this.props.saveGamesToJson(this.props.games);
 //        this.renderTwitch();
     }
     

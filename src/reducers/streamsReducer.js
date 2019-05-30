@@ -6,10 +6,12 @@ import {
     FETCH_TAGS,
     SAVE_TAGS_TO_JSON,
     LOAD_TAGS,
+    LOAD_TAG,
     GET_TAG_BY_NAME,
     FETCH_GAMES,
     SAVE_GAMES_TO_JSON,
-    LOAD_GAMES
+    LOAD_GAMES,
+    LOAD_GAME
 } from '../actions/actionTypes';
 
 export default (state = { playerState: true }, action) => {
@@ -47,6 +49,11 @@ export default (state = { playerState: true }, action) => {
             return {
                 ...state,
                 games: action.payload
+            }
+        case LOAD_GAME:
+            return {
+                ...state,
+                game: action.payload
             }
         case FETCH_TAGS:
             return {

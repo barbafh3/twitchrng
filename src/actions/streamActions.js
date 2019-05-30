@@ -8,7 +8,9 @@ import {
     FETCH_TAGS,
     SAVE_TAGS_TO_JSON,
     GET_TAG_BY_NAME,
-    SAVE_GAMES_TO_JSON
+    SAVE_GAMES_TO_JSON,
+    LOAD_GAME,
+    LOAD_TAG
 } from './actionTypes';
 
 export const fetchStreams = token => async dispatch => {
@@ -94,43 +96,57 @@ export const fetchAll = (url, type, token, sleep) => async dispatch => {
     })
 }
 
-export const saveTagsToJson = (list, sleep) => async dispatch => {
+export const saveTagsToJson = list => async dispatch => {
+    let allTags = []
     await list.forEach(async page => {
         await page.forEach(async tag => {
             const newTag = {
-                tagId: tag.tag_id,
-                tagName: tag.localization_names['en-us']
+                tag_id: tag.tag_id,
+                tag_name: tag.localization_names['en-us']
             }
-            await sleep(2000);
-            await jsonApi.post('tags', newTag);
+            allTags.push(newTag);
         });
     });
+    await jsonApi.post('tags', allTags);
     dispatch({
         type: SAVE_TAGS_TO_JSON,
         payload: null
     })
 }
 
-export const saveGamesToJson = (list, sleep) => async dispatch => {
+export const saveGamesToJson = list => async dispatch => {
+    let allGames = []
     await list.forEach(async page => {
         await page.forEach(async game => {
             const newGame = {
-                gameId: game.id,
-                gameName: game.name,
-                boxArtUrl: game.box_art_url
+                id: game.id,
+                name: game.name,
+                box_art_url: game.box_art_url
             }
-            await sleep(3000);
-            await jsonApi.post('games', newGame);
+            await allGames.push(newGame);
         });
     });
+    await jsonApi.post('games', allGames);
     dispatch({
         type: SAVE_GAMES_TO_JSON,
         payload: null
     })
 }
 
-export const loadJson = (type, entity) => async dispatch => {
-    const response = await jsonApi.get(entity);
+export const loadJson = (type, entity, filter = null) => async dispatch => {
+    let body = {
+        tag_name: '',
+        game_name: ''
+    }
+    if (filter) {
+        if (type === LOAD_TAG){
+            body.tag_name = filter;
+        }
+        if (type === LOAD_GAME) {
+            body.game_name = filter;
+        }
+    }
+    const response = await jsonApi.get(entity, body);
     dispatch({
         type,
         payload: response.data
