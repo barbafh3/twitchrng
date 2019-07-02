@@ -1,25 +1,24 @@
-import React from 'react';
+import React from "react";
+import "fomantic-ui-css/semantic.min.css";
 
-import 'fomantic-ui-css/semantic.min.css';
-
-import StreamShow from './stream/StreamShow';
+import StreamShow from "./stream/StreamShow";
 
 const App = () => {
+  const divStyle = {
+    offset: "10%"
+  };
 
-    let divStyle = {
-        offset: '10%'
-    }
-    
-    return (
-        <div>
-            <div className='ui secondary menu'>
-                <a style={divStyle}className='item'>
-                    <h1>TwitchRNG</h1><br />
-                </a>
-            </div>
-            <StreamShow />
-        </div>
-    );
-}
+  return (
+    <div>
+      <div className="ui secondary menu">
+        <a style={divStyle} className="item">
+          <h1>TwitchRNG</h1>
+          <br />
+        </a>
+      </div>
+      <StreamShow />
+    </div>
+  );
+};
 
 export default App;
