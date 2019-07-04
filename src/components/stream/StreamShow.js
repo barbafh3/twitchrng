@@ -19,12 +19,23 @@ const StreamShow = () => {
   const accessToken = useSelector(state => state.session.twitchToken);
   const delay = useSelector(state => state.streams.delay);
 
-  // Creates the twitch player
+  // // Creates the twitch player
+  // const setEmbed = (ebd, usr) => {
+  //   ebd = new window.Twitch.Embed("twitch_embed", {
+  //     align: "center",
+  //     width: "854",
+  //     height: "480",
+  //     channel: usr,
+  //     layout: "video"
+  //   });
+  // };
+
   const setEmbed = (ebd, usr) => {
     ebd = new window.Twitch.Embed("twitch_embed", {
       align: "center",
-      width: "854",
-      height: "480",
+      position: "absolute",
+      width: "100%",
+      height: "100%",
       channel: usr,
       layout: "video"
     });
@@ -114,18 +125,16 @@ const StreamShow = () => {
     }
   };
 
-  const titleCss = {
-    paddingLeft: "12%"
-  };
-
-  const buttonCss = {
-    paddingRight: "10%"
-  };
-
   const menuCss = {
     paddingLeft: "6%",
     paddingRight: "6%",
-    width: "100%"
+    width: "100%",
+    height: "100%"
+  };
+
+  const playerCss = {
+    width: "90%",
+    height: "78%"
   };
 
   if (streams) {
@@ -145,8 +154,8 @@ const StreamShow = () => {
           </Menu.Menu>
         </Menu>
         <br />
-        <Container color="grey">
-          <Container textAlign="center" id="twitch_embed" />
+        <Container style={playerCss} id="player" color="grey">
+          <Container style={playerCss} textAlign="center" id="twitch_embed" />
         </Container>
         {/*<TagForm onSubmit={onSubmit} />*/}
       </Container>

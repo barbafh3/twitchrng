@@ -5,12 +5,13 @@ import "fomantic-ui-css/semantic.min.css";
 import StreamShow from "./stream/StreamShow";
 
 const App = () => {
-  const divStyle = {
-    paddingLeft: "11%"
+  const playerCss = {
+    width: "75%",
+    height: "100%"
   };
 
   return (
-    <Container>
+    <Container style={playerCss}>
       <StreamShow />
     </Container>
   );
