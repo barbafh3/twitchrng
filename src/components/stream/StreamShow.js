@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Container, Menu, Checkbox } from "semantic-ui-react";
 
 import {
   setPlayerState,
@@ -84,11 +85,11 @@ const StreamShow = () => {
   // Renders the randomize on/off button
   const renderRngButton = () => {
     let text;
-    let classes = "ui button ";
+    let classes = "ui floating button ";
     let icon;
     if (playerState) {
       text = "Keep watching";
-      classes += "primary";
+      classes += "purple";
       icon = "play icon";
     } else {
       text = "blessRNG!";
@@ -96,11 +97,11 @@ const StreamShow = () => {
       icon = "random icon";
     }
     return (
-      <p>
-        <button className={classes} onClick={handleClick}>
-          <i className={icon} /> {text}
-        </button>
-      </p>
+      <Checkbox checked={playerState} onClick={handleClick} toggle />
+
+      // <button className={classes} onClick={handleClick}>
+      //   <i className={icon} /> {text}
+      // </button>
     );
   };
 
@@ -113,13 +114,42 @@ const StreamShow = () => {
     }
   };
 
+  const titleCss = {
+    paddingLeft: "12%"
+  };
+
+  const buttonCss = {
+    paddingRight: "10%"
+  };
+
+  const menuCss = {
+    paddingLeft: "6%",
+    paddingRight: "6%",
+    width: "100%"
+  };
+
   if (streams) {
     return (
-      <div>
-        {renderRngButton()}
+      <Container style={menuCss}>
+        <Menu secondary inverted color="purple">
+          <Menu.Item>
+            <h1>TwitchRNG</h1>
+          </Menu.Item>
+          <Menu.Menu position="right">
+            <Menu.Item>
+              <label color="purple" style={{ fontSize: "20px" }}>
+                Randomize
+              </label>
+            </Menu.Item>
+            <Menu.Item>{renderRngButton()}</Menu.Item>
+          </Menu.Menu>
+        </Menu>
+        <br />
+        <Container color="grey">
+          <Container textAlign="center" id="twitch_embed" />
+        </Container>
         {/*<TagForm onSubmit={onSubmit} />*/}
-        <div className="ui container centered" id="twitch_embed" />
-      </div>
+      </Container>
     );
   } else {
     return <></>;

@@ -1,23 +1,18 @@
 import React from "react";
+import { Container } from "semantic-ui-react";
 import "fomantic-ui-css/semantic.min.css";
 
 import StreamShow from "./stream/StreamShow";
 
 const App = () => {
   const divStyle = {
-    offset: "10%"
+    paddingLeft: "11%"
   };
 
   return (
-    <div>
-      <div className="ui secondary menu">
-        <a style={divStyle} className="item">
-          <h1>TwitchRNG</h1>
-          <br />
-        </a>
-      </div>
+    <Container>
       <StreamShow />
-    </div>
+    </Container>
   );
 };
 
