@@ -1,6 +1,6 @@
 # TwitchRNG
 
-TwitchRNG emulates the fixed program rotation of TV channels using twitch channels.
+TwitchRNG emulates the fixed program rotation of TV channels using twitch streams.
 
 ## Current Features
 
