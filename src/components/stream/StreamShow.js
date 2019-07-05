@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Menu, Checkbox } from "semantic-ui-react";
+import { Container, Menu, Checkbox, Icon } from "semantic-ui-react";
 
 import {
   setPlayerState,
   fetchStreams,
   setUser,
-  setDelay
+  setDelay,
+  setType
 } from "../../actions/stream";
 import { twitchAuth } from "../../actions/session";
 
@@ -14,22 +15,13 @@ const StreamShow = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.streams.user);
+  const type = useSelector(state => state.streams.type);
   const streams = useSelector(state => state.streams.streamList);
   const playerState = useSelector(state => state.streams.playerState);
   const accessToken = useSelector(state => state.session.twitchToken);
   const delay = useSelector(state => state.streams.delay);
 
-  // // Creates the twitch player
-  // const setEmbed = (ebd, usr) => {
-  //   ebd = new window.Twitch.Embed("twitch_embed", {
-  //     align: "center",
-  //     width: "854",
-  //     height: "480",
-  //     channel: usr,
-  //     layout: "video"
-  //   });
-  // };
-
+  // Creates the twitch player
   const setEmbed = (ebd, usr) => {
     ebd = new window.Twitch.Embed("twitch_embed", {
       align: "center",
@@ -63,7 +55,10 @@ const StreamShow = () => {
   const randomUser = async () => {
     let rng = Math.trunc(Math.random() * 20);
     let newUser = streams[rng].user_name;
+    let type = streams[rng].type;
+    console.log(type);
     await dispatch(setUser(newUser));
+    await dispatch(setType(type));
   };
 
   // Runs once when component mounts.
@@ -90,7 +85,11 @@ const StreamShow = () => {
   // Re-renders the player everytime
   // the user changes
   useEffect(() => {
-    renderTwitch();
+    if (type === "live") {
+      renderTwitch();
+    } else {
+      randomUser();
+    }
   }, [user]);
 
   // Renders the randomize on/off button
@@ -132,15 +131,22 @@ const StreamShow = () => {
     height: "100%"
   };
 
+  const playerDivCss = {
+    width: "100%",
+    height: "77.5%",
+    paddingTop: "3%"
+  };
+
   const playerCss = {
-    width: "90%",
-    height: "78%"
+    width: "85%",
+    height: "100%",
+    paddingBottom: "5%"
   };
 
   if (streams) {
     return (
       <Container style={menuCss}>
-        <Menu secondary inverted color="purple">
+        <Menu borderless inverted color="purple">
           <Menu.Item>
             <h1>TwitchRNG</h1>
           </Menu.Item>
@@ -154,10 +160,20 @@ const StreamShow = () => {
           </Menu.Menu>
         </Menu>
         <br />
-        <Container style={playerCss} id="player" color="grey">
+        <Container style={playerDivCss} id="player" color="grey">
           <Container style={playerCss} textAlign="center" id="twitch_embed" />
         </Container>
         {/*<TagForm onSubmit={onSubmit} />*/}
+        <Menu borderless inverted footer size="large" color="purple">
+          <Menu.Item>
+            <Icon name="github" />
+            <a href="https://github.com/barbafh3/twitchrng">Github</a>
+          </Menu.Item>
+          <Menu.Item>
+            <Icon name="twitter" />
+            <a href="https://www.twitter.com/onizildo">Twitter</a>
+          </Menu.Item>
+        </Menu>
       </Container>
     );
   } else {
