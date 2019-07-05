@@ -1,18 +1,38 @@
 import React from "react";
+import { Router, Route } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "fomantic-ui-css/semantic.min.css";
 
-import StreamShow from "./stream/StreamShow";
+import StreamShow from "./stream/Show";
+import About from "./about";
+import Header from "./Header";
+import Footer from "./Footer";
+
+import history from "../history";
 
 const App = () => {
-  const playerCss = {
-    width: "75%",
+  const pageCss = {
+    width: "70%",
+    height: "100%"
+  };
+
+  const menuCss = {
+    paddingLeft: "6%",
+    paddingRight: "6%",
+    width: "100%",
     height: "100%"
   };
 
   return (
-    <Container style={playerCss}>
-      <StreamShow />
+    <Container style={pageCss}>
+      <Container style={menuCss}>
+        <Router history={history}>
+          <Header />
+          <Route path="/" exact component={StreamShow} />
+          <Route path="/about" component={About} />
+          <Footer />
+        </Router>
+      </Container>
     </Container>
   );
 };
