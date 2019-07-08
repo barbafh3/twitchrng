@@ -4,7 +4,7 @@ import { Container } from "semantic-ui-react";
 import "fomantic-ui-css/semantic.min.css";
 
 import StreamShow from "./stream/Show";
-import About from "./about";
+import About from "./About";
 import Header from "./Header";
 import Footer from "./Footer";
 
