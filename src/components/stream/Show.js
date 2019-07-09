@@ -62,7 +62,7 @@ const StreamShow = () => {
     const interval = setInterval(() => {
       if (playerState && streams) {
         dispatch(randomUser(streams, recentUsers));
-        dispatch(setDelay(300_000));
+        dispatch(setDelay(300000));
       }
     }, delay);
     return () => clearInterval(interval);
