@@ -18,6 +18,8 @@ import {
   SET_RECENT
 } from "./types";
 
+export const test = () => async dispatch => {};
+
 export const addRecentUser = (recentUsers, user) => async dispatch => {
   recentUsers.push(user);
   dispatch({ type: SET_RECENT, payload: recentUsers });
